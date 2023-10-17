@@ -26,6 +26,9 @@ spec:
       app.kubernetes.io/part-of: kafka
   serviceName: {{ printf "%s-controller-headless" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   updateStrategy: {{- include "common.tplvalues.render" (dict "value" .Values.controller.updateStrategy "context" $ ) | nindent 4 }}
+  {{- if and .Values.controller.minReadySeconds (semverCompare ">= 1.23-0" (include "common.capabilities.kubeVersion" .)) }}
+  minReadySeconds: {{ .Values.controller.minReadySeconds }}
+  {{- end }}
   template:
     metadata:
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
@@ -49,6 +52,7 @@ spec:
         {{- end }}
     spec:
       {{- include "kafka.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.controller.automountServiceAccountToken }}
       {{- if .Values.controller.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.controller.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -88,6 +92,12 @@ spec:
       {{- end }}
       serviceAccountName: {{ include "kafka.serviceAccountName" . }}
       enableServiceLinks: {{ .Values.controller.enableServiceLinks }}
+      {{- if .Values.dnsPolicy  }}
+      dnsPolicy: {{ .Values.dnsPolicy }}
+      {{- end }}
+      {{- if .Values.dnsConfig }}
+      dnsConfig: {{- include "common.tplvalues.render" (dict "value" .Values.dnsConfig "context" $) | nindent 8 }}
+      {{- end }}
       initContainers:
         {{- if and .Values.volumePermissions.enabled .Values.controller.persistence.enabled }}
         - name: volume-permissions
@@ -109,6 +119,8 @@ spec:
           {{- end }}
           {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: data
@@ -282,6 +294,8 @@ spec:
           {{- end }}
           {{- if .Values.controller.resources }}
           resources: {{- toYaml .Values.controller.resources | nindent 12 }}
+          {{- else if ne .Values.controller.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.controller.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: data
@@ -335,6 +349,8 @@ spec:
               containerPort: {{ .Values.metrics.jmx.containerPorts.metrics }}
           {{- if .Values.metrics.jmx.resources }}
           resources: {{- toYaml .Values.metrics.jmx.resources | nindent 12 }}
+          {{- else if ne .Values.metrics.jmx.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.metrics.jmx.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: jmx-config
@@ -364,7 +380,7 @@ spec:
         - name: scripts
           configMap:
             name: {{ include "common.names.fullname" . }}-scripts
-            defaultMode: 0755
+            defaultMode: 493
         {{- if and .Values.externalAccess.enabled .Values.externalAccess.autoDiscovery.enabled }}
         - name: kafka-autodiscovery-shared
           emptyDir: {}
@@ -426,7 +442,9 @@ spec:
   {{- if or (and .Values.controller.persistence.enabled (not .Values.controller.persistence.existingClaim)) (and .Values.controller.logPersistence.enabled (not .Values.controller.logPersistence.existingClaim)) }}
   volumeClaimTemplates:
     {{- if and .Values.controller.persistence.enabled (not .Values.controller.persistence.existingClaim) }}
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         name: data
         {{- if .Values.controller.persistence.annotations }}
         annotations: {{- include "common.tplvalues.render" (dict "value" .Values.controller.persistence.annotations "context" $) | nindent 10 }}
@@ -448,7 +466,9 @@ spec:
         {{- end -}}
     {{- end }}
     {{- if and .Values.controller.logPersistence.enabled (not .Values.controller.logPersistence.existingClaim) }}
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         name: logs
         {{- if .Values.controller.logPersistence.annotations }}
         annotations: {{- include "common.tplvalues.render" (dict "value" .Values.controller.logPersistence.annotations "context" $) | nindent 10 }}
