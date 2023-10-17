@@ -12,8 +12,10 @@ metadata:
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: kafka-provisioning
   annotations:
+    {{- if .Values.provisioning.useHelmHooks }}
     helm.sh/hook: post-install,post-upgrade
     helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+    {{- end }}
     {{- if .Values.commonAnnotations }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
     {{- end }}
@@ -28,6 +30,7 @@ spec:
       {{- end }}
     spec:
       serviceAccountName: {{ template "kafka.provisioning.serviceAccountName" . }}
+      automountServiceAccountToken: {{ .Values.provisioning.automountServiceAccountToken }}
       enableServiceLinks: {{ .Values.provisioning.enableServiceLinks }}
       {{- include "kafka.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.provisioning.schedulerName }}
@@ -66,6 +69,8 @@ spec:
               echo "Kafka is available";
           {{- if .Values.provisioning.resources }}
           resources: {{- toYaml .Values.provisioning.resources | nindent 12 }}
+          {{- else if ne .Values.provisioning.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.provisioning.resourcesPreset) | nindent 12 }}
           {{- end }}
         {{- end }}
         {{- if .Values.provisioning.initContainers }}
@@ -184,7 +189,7 @@ spec:
           env:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
-            {{- if (regexFind "SSL" (upper .Values.listeners.client.protocol)) }}
+            {{- if and (regexFind "SSL" (upper .Values.listeners.client.protocol)) .Values.provisioning.auth.tls.passwordsSecret }}
             - name: KAFKA_CLIENT_KEY_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -239,6 +244,8 @@ spec:
           {{- end }}
           {{- if .Values.provisioning.resources }}
           resources: {{- toYaml .Values.provisioning.resources | nindent 12 }}
+          {{- else if ne .Values.provisioning.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.provisioning.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             {{- if or .Values.log4j .Values.existingLog4jConfigMap }}
