@@ -1,8 +1,72 @@
 # Changelog
 
-## 29.3.14 (2024-08-01)
+## 30.1.8 (2024-10-31)
 
-* bitnami/kafka Add extraListeners to kafka.listeners in _helpers.tpl ([#28604](https://github.com/bitnami/charts/pull/28604))
+* [bitnami/kafka] Release 30.1.8 ([#30146](https://github.com/bitnami/charts/pull/30146))
+
+## <small>30.1.7 (2024-10-29)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/kafka] Release 30.1.7 (#30119) ([eee4d5b](https://github.com/bitnami/charts/commit/eee4d5b67fdbea9df74ef21bc2fc7d5214dbb2f4)), closes [#30119](https://github.com/bitnami/charts/issues/30119)
+
+## <small>30.1.6 (2024-10-18)</small>
+
+* [bitnami/kafka] broker-list option is deprecated, change to bootstrap-server (#29864) ([2e7b0bf](https://github.com/bitnami/charts/commit/2e7b0bfe8dc6245c573073d21afaf09eedb75b6c)), closes [#29864](https://github.com/bitnami/charts/issues/29864)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>30.1.5 (2024-10-07)</small>
+
+* [bitnami/kafka] Update default value of `heapOpts` to fit Kafka pod RAM limit while utilize its incr ([51a574e](https://github.com/bitnami/charts/commit/51a574e7a0f97ec479349080d5c137bdaa4bf033)), closes [#29670](https://github.com/bitnami/charts/issues/29670) [#29782](https://github.com/bitnami/charts/issues/29782) [#29670](https://github.com/bitnami/charts/issues/29670)
+
+## <small>30.1.4 (2024-09-22)</small>
+
+* Update values.yaml (#29557) ([40a12b6](https://github.com/bitnami/charts/commit/40a12b6f509a7f6894212eac200215c4ed7bc088)), closes [#29557](https://github.com/bitnami/charts/issues/29557)
+
+## <small>30.1.3 (2024-09-19)</small>
+
+* [bitnami/kafka] Release 30.1.3 (#29518) ([f88b375](https://github.com/bitnami/charts/commit/f88b37547aafb3e788603e4432f87dd421b91a9c)), closes [#29518](https://github.com/bitnami/charts/issues/29518)
+
+## <small>30.1.2 (2024-09-17)</small>
+
+* [bitnami/kafka] test: :white_check_mark: Improve reliability of ginkgo tests (#29466) ([a67fc13](https://github.com/bitnami/charts/commit/a67fc1332a7f545e512f7cfabe8d0f5e1b318669)), closes [#29466](https://github.com/bitnami/charts/issues/29466)
+
+## <small>30.1.1 (2024-09-14)</small>
+
+* [bitnami/kafka] Release 30.1.1 (#29417) ([798c4df](https://github.com/bitnami/charts/commit/798c4dfd7e236ac6f8d508e2f3ccf5fd405bd26c)), closes [#29417](https://github.com/bitnami/charts/issues/29417)
+
+## 30.1.0 (2024-09-13)
+
+* [bitnami/kafka] feature: NetworkPolicy review (#29274) ([e406f1f](https://github.com/bitnami/charts/commit/e406f1f45a60c4d12eab0266a30077856ea05c7a)), closes [#29274](https://github.com/bitnami/charts/issues/29274)
+* [bitnami/kafka] update readme with new architecture for externalAccess services (#29098) ([5e5609c](https://github.com/bitnami/charts/commit/5e5609c33e245478290c4f4a6e73380042c237ac)), closes [#29098](https://github.com/bitnami/charts/issues/29098)
+
+## <small>30.0.5 (2024-08-23)</small>
+
+* bitnami/kafka Fix pem auth with custom encrypted private key (#28618) ([96b751e](https://github.com/bitnami/charts/commit/96b751e3eb0a6acba28e0fcbca907bb2de88fdf5)), closes [#28618](https://github.com/bitnami/charts/issues/28618)
+
+## <small>30.0.4 (2024-08-14)</small>
+
+* [bitnami/kafka] Release 30.0.4 (#28878) ([3ff1490](https://github.com/bitnami/charts/commit/3ff14908c56a481e551f94cee08ad0488042d186)), closes [#28878](https://github.com/bitnami/charts/issues/28878)
+
+## <small>30.0.3 (2024-08-08)</small>
+
+* [bitnami/kafka] Add support IMDSv2 for getting brokerRackAwareness data (#27921) ([701467a](https://github.com/bitnami/charts/commit/701467a1a5055aab8c4adf64111a8eb6ad8c47c9)), closes [#27921](https://github.com/bitnami/charts/issues/27921)
+
+## <small>30.0.2 (2024-08-07)</small>
+
+* [bitnami/kafka] Release 30.0.2 (#28734) ([b7dbfe6](https://github.com/bitnami/charts/commit/b7dbfe6c90679ab6ccab521cba8a0ee08595073b)), closes [#28734](https://github.com/bitnami/charts/issues/28734)
+
+## <small>30.0.1 (2024-08-06)</small>
+
+* [bitnami/kafka] Release 30.0.1 (#28699) ([65eac83](https://github.com/bitnami/charts/commit/65eac83c6640522e479f7d07923a934b9f657d99)), closes [#28699](https://github.com/bitnami/charts/issues/28699)
+* [bitnami/kafka] Upgrade notes (#28673) ([cae42b9](https://github.com/bitnami/charts/commit/cae42b9674c5ce54aeb693aa5973954e1d0162f4)), closes [#28673](https://github.com/bitnami/charts/issues/28673)
+
+## 30.0.0 (2024-08-05)
+
+* [bitnami/kafka] Release 30.0.0 (#28666) ([a6625ec](https://github.com/bitnami/charts/commit/a6625ec0dd042d9848107dd853ff0cc58178800c)), closes [#28666](https://github.com/bitnami/charts/issues/28666)
+
+## <small>29.3.14 (2024-08-01)</small>
+
+* bitnami/kafka Add extraListeners to kafka.listeners in _helpers.tpl (#28604) ([940b7bd](https://github.com/bitnami/charts/commit/940b7bddfe28023ba102d391745bf6552265c293)), closes [#28604](https://github.com/bitnami/charts/issues/28604)
 
 ## <small>29.3.13 (2024-07-25)</small>
 
